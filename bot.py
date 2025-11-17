@@ -15,6 +15,13 @@ from handler.inputmetro_command import register_handler as inputmetro_handler
 from handler.cekgpon_command_v2 import register_handler as cekgpon_handler_v2
 from handler.cekmetro_command import register_handler as cekmetro_handler
 
+# Import show handler (setelah file dibuat)
+try:
+    from handler.show_ftm_command import register_handler as show_ftm_handler
+    SHOW_FTM_AVAILABLE = True
+except ImportError:
+    SHOW_FTM_AVAILABLE = False
+
 # 🔐 Load token dari .env
 load_dotenv()
 bot_token = os.getenv('BOT_TOKEN')
@@ -27,6 +34,10 @@ inputftm_handler(app)
 inputmetro_handler(app)
 cekgpon_handler_v2(app)
 cekmetro_handler(app)
+
+# Register show handler jika tersedia
+if SHOW_FTM_AVAILABLE:
+    show_ftm_handler(app)
 
 # 📋 Set command menu Telegram (agar muncul di menu /)
 async def set_bot_commands(application):
@@ -41,6 +52,10 @@ async def set_bot_commands(application):
         BotCommand("cekgpon", "Cek data GPON"),
         BotCommand("ceksto", "Cek status STO"),
         BotCommand("cekmetro", "Cek data Metro"),
+        BotCommand("infosto", "Informasi STO (Metro)"),
+        BotCommand("showftm", "Tampilkan data FTM"),
+        BotCommand("showgpon", "Tampilkan data per GPON"),
+        BotCommand("showsto", "Tampilkan data per STO"),
         BotCommand("inputftm", "Upload data FTM"),
         BotCommand("inputmetro", "Upload data Metro"),
     ]
